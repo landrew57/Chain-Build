@@ -36,6 +36,9 @@ function checkParents($candidate, $certTypes, $rootCertificates, $intermediateCe
 	$parents = [];
 	foreach ($certTypes as $type) {
 		foreach (${$type . "Certificates"} as $certificate) {
+      if(isset($certificate['parsed']['issuer']) && isset($certificate['parsed']['subject']) && $certificate['parsed']['issuer'] == $certificate['parsed']['subject']) {
+        continue;
+      }
 			if (isset($certificate['parsed']['extensions']['subjectKeyIdentifier']) &&
 				isset($candidate['extensions']['authorityKeyIdentifier']) &&
 				$certificate['parsed']['extensions']['subjectKeyIdentifier'] === trim(str_replace('keyid:', '', $candidate['extensions']['authorityKeyIdentifier']))) {
